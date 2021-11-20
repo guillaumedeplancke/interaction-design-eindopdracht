@@ -124,10 +124,24 @@ const getTrafficReportSummary = (report) => {
 
     return {
         'pedestrians': Math.round(total_pedestrians),
-        'bikers': Math.round(total_bikers),
+        'bikes': Math.round(total_bikers),
         'cars': Math.round(total_cars),
         'heavy': Math.round(total_heavy)
     };
+};
+
+const showTrafficReport = (summary) => {
+    const pedestriansCount = document.querySelector('.js-pedestrians .js-counter'),
+        bikersCount = document.querySelector('.js-bikes .js-counter'),
+        carsCount = document.querySelector('.js-cars .js-counter'),
+        trucksCount = document.querySelector('.js-trucks .js-counter');
+
+    pedestriansCount.innerHTML = summary.pedestrians;
+    bikersCount.innerHTML = summary.bikes;
+    carsCount.innerHTML = summary.cars;
+    trucksCount.innerHTML = summary.heavy;
+
+    // TODO: visualize traffic with icons
 };
 
 const dropdownItemChangedEvent = async () => {
@@ -145,7 +159,7 @@ const dropdownItemChangedEvent = async () => {
 
     console.log(reportSummary);
 
-    // todo: visualize data
+    showTrafficReport(reportSummary);
 };
 
 const getTrafficReportForSegment = (segmentId) => {};

@@ -13,11 +13,43 @@
 </head>
 
 <body>
-	<h1>TrafficInsight</h1>
+	<div class="c-app">
+		<div class="c-app__logo">
+			<h1>TrafficInsight</h1>
+		</div>
 
-	<select name="segments" class="js-segments">
-		<option selected disabled>No data yet...</option>
-	</select>
+		<div class="c-app__selector">
+			<select name="segments" class="js-segments">
+				<option selected disabled>No data yet...</option>
+			</select>
+		</div>
+
+		<div class="c-app__reports">
+			<div class="c-report js-pedestrians">
+				<h2 class="c-report__label">Voetgangers</h2>
+				<p class="c-report__counter js-counter">--</p>
+			</div>
+
+			<div class="c-report js-bikes">
+				<h2 class="c-report__label">Fietsers</h2>
+				<p class="c-report__counter js-counter">--</p>
+			</div>
+
+			<div class="c-report js-cars">
+				<h2 class="c-report__label">Auto's</h2>
+				<p class="c-report__counter js-counter">--</p>
+			</div>
+
+			<div class="c-report js-trucks">
+				<h2 class="c-report__label">Vrachtwagens</h2>
+				<p class="c-report__counter js-counter">--</p>
+			</div>
+		</div>
+
+		<div class="c-app__datepicker">
+			<!-- TODO: add datepicker -->
+		</div>
+	</div>
 
 	<!-- Source: https://github.com/proj4js/proj4js#using-->
 	<script src="./js/proj4.js"></script>
