@@ -87,14 +87,65 @@ const fillDropdownWithSegments = (segments) => {
     });
 };
 
-const dropdownItemChangedEvent = () => {
+const getTrafficForSegment = async (oidn) => {
+    const endpoint = '/reports/traffic';
+    const url = proxyUrl + apiUrl + endpoint;
+
+    return await fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-Api-Key': apiKey,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            level: 'segments',
+            format: 'per-hour',
+            id: oidn,
+            time_start: '2021-11-06 00:00:00Z',
+            time_end: '2021-11-06 23:59:59Z',
+        }),
+    })
+        .then((response) => response.json())
+        .then((data) => data);
+};
+
+const getTrafficReportSummary = (report) => {
+    let total_pedestrians = 0,
+        total_bikers = 0,
+        total_cars = 0,
+        total_heavy = 0;
+
+    report.forEach((item) => {
+        total_pedestrians += item.pedestrian;
+        total_bikers += item.bike;
+        total_cars += item.car;
+        total_heavy += item.heavy;
+    });
+
+    return {
+        'pedestrians': Math.round(total_pedestrians),
+        'bikers': Math.round(total_bikers),
+        'cars': Math.round(total_cars),
+        'heavy': Math.round(total_heavy)
+    };
+};
+
+const dropdownItemChangedEvent = async () => {
     let segmentsDropdown = document.querySelector('.js-segments');
 
     console.log('changed!');
 
     console.log(segmentsDropdown.value);
 
-    // todo: get data
+    const data = await getTrafficForSegment(segmentsDropdown.value);
+
+    console.log(data.report);
+
+    const reportSummary = getTrafficReportSummary(data.report);
+
+    console.log(reportSummary);
+
+    // todo: visualize data
 };
 
 const getTrafficReportForSegment = (segmentId) => {};
