@@ -80,11 +80,12 @@ const fillDropdownWithSegments = (segments) => {
 
     segmentsDropdown.innerHTML = '';
 
-    segments.forEach((streetname, id) => {
-        // todo: check why the last items starting with 90000 are not being processed
-        console.log(id);
+    for (var item in segments) {
+        let id = item,
+            streetname = segments[id];
+
         segmentsDropdown.innerHTML += "<option value='" + id + "'>" + streetname + '</option>';
-    });
+    }
 };
 
 const getTrafficForSegment = async (oidn) => {
