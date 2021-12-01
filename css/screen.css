@@ -7,7 +7,27 @@
 \*------------------------------------*/
 
 :root {
+    /* colors */
+    --global-color-alpha-10: #f7f8fc;
+    --global-color-alpha-20: #1c38f2;
+    --global-color-alpha-30: #0018b3;
+    --global-color-alpha-40: #19298e;
+    --global-color-alpha-50: #00094d;
+    --global-color-alpha-60: #000633;
 
+    /* gradients */
+    --global-gradient-alpha: linear-gradient(to right, var(--global-color-alpha-30), var(--global-color-alpha-40));
+
+    /* baseline settings */
+    --global-baseline: 8px; /* todo: replace px with rem */
+    --global-whitespace: calc(var(--global-baseline) * 2); /* = 16px */
+    
+    --global-whitespace-xs: calc(var(--global-baseline) * .5); /* = 4px */
+    --global-whitespace-sm: calc(var(--global-baseline) * 1); /*  = 8px */
+    --global-whitespace-md: var(--global-whitespace); /*  = 16px */
+    --global-whitespace-lg: calc(var(--global-whitespace) * 1.5); /* = 24px */
+    --global-whitespace-xl: calc(var(--global-whitespace) * 2); /*  = 32px */
+    --global-whitespace-xxl: calc(var(--global-whitespace) * 3); /*  = 48px */
 }
 
 /* CSS variables here */
@@ -26,11 +46,11 @@ html {
     font-size: 16px;
     line-height: 1.5;
     font-family: Helvetica, arial, sans-serif;
-    color: grey;
+    color: var(--global-color-alpha-10);
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: white;
+    background-color: var(--global-color-alpha-60);
 }
 
 *,
@@ -47,13 +67,13 @@ html {
 */
 
 ::-moz-selection {
-    background: HotPink;
+    background: var(--global-color-alpha-20);
     color: white;
     text-shadow: none;
 }
 
 ::selection {
-    background: HotPink;
+    background: var(--global-color-alpha-20);
     color: white;
     text-shadow: none;
 }
@@ -159,7 +179,7 @@ hr {
 
 a {
     color: HotPink;
-    transition: all .1s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 a:visited,
@@ -422,6 +442,75 @@ a:focus {
 #COMPONENTS
 \*------------------------------------*/
 
+/*
+    Component: App
+    ---
+    Main app wrapper
+*/
+
+.c-app {
+    margin: auto;
+    max-width: 500px;
+    padding: var(--global-whitespace-xl);
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/*
+    Component: Location Selector
+    ---
+    App location dropdown
+*/
+
+.c-selector {
+    margin-bottom: var(--global-whitespace-xl);
+}
+
+.c-selector__input {
+    background-color: var(--global-color-alpha-50);
+    border: 2px solid var(--global-color-alpha-30);
+    color: var(--global-color-alpha-10);
+    
+    padding: var(--global-whitespace);
+    border-radius: 4px;
+    width: 100%;
+}
+
+/*
+    Component: Logo
+    ---
+    App main logo
+*/
+
+.c-logo {
+    text-align: center;
+}
+
+/*
+    Component: Report
+    ---
+    Traffic report item
+*/
+
+.c-report {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+    overflow: scroll;
+
+    background-image: var(--global-gradient-alpha);
+    margin-bottom: var(--global-whitespace-lg);
+    padding: var(--global-whitespace-lg);
+    border-radius: 12px; /* todo: convert px to rem */
+}
+
+.c-report__counter {
+    text-align: right;
+}
 
 /*------------------------------------*\
 #UTILITIES
@@ -486,7 +575,6 @@ a:focus {
 .u-max-width-none {
     max-width: none !important;
 }
-
 
 /*
     Utilities: align
@@ -765,18 +853,18 @@ No media query since this is the default in mobile first design
         text-decoration: underline;
     }
     a[href]:after {
-        content: " (" attr(href) ")";
+        content: ' (' attr(href) ')';
     }
     abbr[title]:after {
-        content: " (" attr(title) ")";
+        content: ' (' attr(title) ')';
     }
     /*
     * Don't show links that are fragment identifiers,
     * or use the `javascript:` pseudo protocol
     */
-    a[href^="#"]:after,
-    a[href^="javascript:"]:after {
-        content: "";
+    a[href^='#']:after,
+    a[href^='javascript:']:after {
+        content: '';
     }
     pre {
         white-space: pre-wrap !important;
