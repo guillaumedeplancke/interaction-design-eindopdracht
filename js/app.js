@@ -27,7 +27,23 @@ const getAllSegments = () => {
         .then((data) => filterSegments(data));
 };
 
+const getCameraForSegment = async (segmentId) => {
+    const endpoint = '/cameras/segment/' + segmentId;
+    const url = proxyUrl + apiUrl + endpoint;
+
+    let result = await fetch(url, {
+        headers: {
+            'X-Api-Key': apiKey,
+        },
+    })
+        .then((response) => response.json())
+        .then((data) => data);
+
+    return result;
+};
+
 const filterSegments = async (data) => {
+    const today = new Date();
     const userLocation = getUserCoordinates();
     const segments = data.features;
 
@@ -41,16 +57,27 @@ const filterSegments = async (data) => {
         let coordinates_converted = proj4('EPSG:31370', 'EPSG:4326', [coordinates[0], coordinates[1]]);
 
         if (isCoordinateInRange(coordinates_converted, userLocation, 2)) {
-            let streetname = await getStreetnameFromCoordinates(coordinates_converted);
-            console.log(segment);
+            let cameraResults = await getCameraForSegment(segment.properties.oidn);
+            
+            if (cameraResults.camera && cameraResults.camera.length > 0) {
+                let latestImage = cameraResults.camera[0].last_data_package;
+                // note: the 'camera' array can contain multiple camera's, when achieving to few result it may be interesting to also look to the other camera's
 
-            console.log(streetname.address.road + ' ' + streetname.address.city_district);
+                if (latestImage) {
+                    let latestImageDate = new Date(Date.parse(latestImage));
 
-            filteredSegments[segment.properties.oidn] = streetname.address.road + ', ' + streetname.address.city_district;
+                    if (today.getMonth() === latestImageDate.getMonth()) {
+                        let streetname = await getStreetnameFromCoordinates(coordinates_converted);
+                        console.log(segment);
+
+                        console.log(streetname.address.road + ' ' + streetname.address.city_district);
+
+                        filteredSegments[segment.properties.oidn] = streetname.address.road + ', ' + streetname.address.city_district;
+                    }
+                }
+            }
         }
     }
-
-    console.log('total: ' + filteredSegments.length);
 
     return filteredSegments;
 };
@@ -124,10 +151,10 @@ const getTrafficReportSummary = (report) => {
     });
 
     return {
-        'pedestrians': Math.round(total_pedestrians),
-        'bikes': Math.round(total_bikers),
-        'cars': Math.round(total_cars),
-        'heavy': Math.round(total_heavy)
+        pedestrians: Math.round(total_pedestrians),
+        bikes: Math.round(total_bikers),
+        cars: Math.round(total_cars),
+        heavy: Math.round(total_heavy),
     };
 };
 
