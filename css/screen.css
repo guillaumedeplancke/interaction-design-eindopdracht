@@ -500,7 +500,7 @@ a:focus {
     grid-template-columns: 1fr 1fr;
 
     align-items: center;
-    overflow: scroll;
+    overflow: auto;
 
     background-image: var(--global-gradient-alpha);
     margin-bottom: var(--global-whitespace-lg);
