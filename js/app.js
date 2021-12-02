@@ -66,7 +66,7 @@ const isCoordinateInRange = (checkPoint, centerPoint, km) => {
 
 const getStreetnameFromCoordinates = async (coords) => {
     //const url = 'https://nominatim.openstreetmap.org/reverse?lon=' + coords[0] + '&lat=' + coords[1] + '&format=json';
-    const url = 'http://open.mapquestapi.com/nominatim/v1/reverse.php?key=A8O7jLMI6RxfT7ccvE6AGG7bKAQ8iRwk&format=json&lat=' + coords[1] + '&lon=' + coords[0];
+    const url = 'https://open.mapquestapi.com/nominatim/v1/reverse.php?key=A8O7jLMI6RxfT7ccvE6AGG7bKAQ8iRwk&format=json&lat=' + coords[1] + '&lon=' + coords[0];
 
     let result = await fetch(url)
         .then((response) => response.json())
