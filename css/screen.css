@@ -10,6 +10,7 @@
     /* colors */
     --global-color-alpha-10: #f7f8fc;
     --global-color-alpha-20: #1c38f2;
+    --global-color-alpha-20-transparent: #1c38f2bb;
     --global-color-alpha-30: #0018b3;
     --global-color-alpha-40: #19298e;
     --global-color-alpha-50: #00094d;
@@ -460,6 +461,66 @@ a:focus {
 }
 
 /*
+    Component: Input
+    ---
+    Class to put on all input="text" like form inputs
+*/
+
+.c-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+
+    font-family: inherit;
+    font-size: 16px;
+    
+    border: 2px solid var(--global-color-alpha-30);
+    background-color: var(--global-color-alpha-50);
+    color: var(--global-color-alpha-10);
+    padding: var(--global-whitespace);
+    border-radius: 4px;
+    
+    transition: all 0.2s ease-out;
+}
+
+.c-input:hover {
+    border-color: var(--global-color-alpha-20);
+}
+
+.c-input:focus,
+.c-input:active {
+    border-color: var(--global-color-alpha-20);
+    box-shadow: 0 0 0 2px var(--global-color-alpha-20-transparent);
+}
+
+/*
+    Component: Custom Select
+    ---
+    Custom select dropdown
+*/
+
+
+.c-custom-select {
+    display: block;
+    position: relative;
+}
+
+.c-custom-select__input {
+    width: 100%;
+}
+
+.c-custom-select__symbol {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    top: 15px;
+    right: 12px;
+    pointer-events: none;
+    fill: var(--global-color-alpha-10);
+}
+
+/*
     Component: Location Selector
     ---
     App location dropdown
@@ -467,16 +528,6 @@ a:focus {
 
 .c-selector {
     margin-bottom: var(--global-whitespace-xl);
-}
-
-.c-selector__input {
-    background-color: var(--global-color-alpha-50);
-    border: 2px solid var(--global-color-alpha-30);
-    color: var(--global-color-alpha-10);
-    
-    padding: var(--global-whitespace);
-    border-radius: 4px;
-    width: 100%;
 }
 
 /*
