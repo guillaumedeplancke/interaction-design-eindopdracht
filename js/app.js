@@ -2,6 +2,9 @@ const apiKey = 'ZsNKAguxnB7VDiP5bJEaY1a9Lh8Ymx2D7nhxbdFD';
 const apiUrl = 'https://telraam-api.net/v1';
 const proxyUrl = 'https://cors.guillaume.cloud/';
 
+let currentDisplayDate, datepicker;
+let segmentsDropdown, dateInput;
+
 // Source: https://epsg.io/31370
 var be_proj =
     'PROJCS["Belge 1972 / Belgian Lambert 72", GEOGCS["Belge 1972", DATUM["Reseau_National_Belge_1972", SPHEROID["International 1924",6378388,297, AUTHORITY["EPSG","7022"]], TOWGS84[-106.869,52.2978,-103.724,0.3366,-0.457,1.8422,-1.2747], AUTHORITY["EPSG","6313"]], PRIMEM["Greenwich",0, AUTHORITY["EPSG","8901"]], UNIT["degree",0.0174532925199433, AUTHORITY["EPSG","9122"]], AUTHORITY["EPSG","4313"]], PROJECTION["Lambert_Conformal_Conic_2SP"], PARAMETER["standard_parallel_1",51.16666723333333], PARAMETER["standard_parallel_2",49.8333339], PARAMETER["latitude_of_origin",90], PARAMETER["central_meridian",4.367486666666666], PARAMETER["false_easting",150000.013], PARAMETER["false_northing",5400088.438], UNIT["metre",1, AUTHORITY["EPSG","9001"]], AXIS["X",EAST], AXIS["Y",NORTH], AUTHORITY["EPSG","31370"]]';
@@ -103,8 +106,6 @@ const getStreetnameFromCoordinates = async (coords) => {
 };
 
 const fillDropdownWithSegments = (segments) => {
-    let segmentsDropdown = document.querySelector('.js-segments');
-
     segmentsDropdown.innerHTML = '';
 
     for (var item in segments) {
@@ -119,6 +120,12 @@ const getTrafficForSegment = async (oidn) => {
     const endpoint = '/reports/traffic';
     const url = proxyUrl + apiUrl + endpoint;
 
+    let startTime = new Date(currentDisplayDate);
+    startTime.setHours(0, 0);
+
+    let stopTime = new Date(currentDisplayDate);
+    stopTime.setHours(23, 59);
+
     return await fetch(url, {
         method: 'POST',
         headers: {
@@ -129,8 +136,8 @@ const getTrafficForSegment = async (oidn) => {
             level: 'segments',
             format: 'per-hour',
             id: oidn,
-            time_start: '2021-11-06 00:00:00Z',
-            time_end: '2021-11-06 23:59:59Z',
+            time_start: startTime,
+            time_end: stopTime,
         }),
     })
         .then((response) => response.json())
@@ -173,15 +180,15 @@ const showTrafficReport = (summary) => {
 };
 
 const dropdownItemChangedEvent = async () => {
-    let segmentsDropdown = document.querySelector('.js-segments');
-
     console.log('changed!');
 
     console.log(segmentsDropdown.value);
 
-    const data = await getTrafficForSegment(segmentsDropdown.value);
+    updateTrafficReport();
+};
 
-    console.log(data.report);
+const updateTrafficReport = async () => {
+    const data = await getTrafficForSegment(segmentsDropdown.value);
 
     const reportSummary = getTrafficReportSummary(data.report);
 
@@ -192,18 +199,63 @@ const dropdownItemChangedEvent = async () => {
 
 const getTrafficReportForSegment = (segmentId) => {};
 
+const previousDayButtonClickedEvent = () => {
+    console.log("previous");
+
+    currentDisplayDate.setDate(currentDisplayDate.getDate() - 1);
+
+    datepicker.setDate(currentDisplayDate);
+};
+
+const nextDayButtonClickedEvent = () => {
+    console.log("next");
+
+    if (currentDisplayDate.getDate() != new Date().getDate() || currentDisplayDate.getMonth() != new Date().getMonth()) {
+        currentDisplayDate.setDate(currentDisplayDate.getDate() + 1);
+    }   
+
+    datepicker.setDate(currentDisplayDate);
+};
+
 const initFrontend = async () => {
+    currentDisplayDate = new Date(); // set date of today as default display date
+
+    datepicker = new Pikaday({
+        field: dateInput,
+        defaultDate: new Date(),
+        setDefaultDate: true,
+        maxDate: new Date(),
+        format: 'D/M/YYYY',
+        toString(date, format) {
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        },
+        onSelect: function(date) {
+            currentDisplayDate = date;
+        }
+    });
+
+    document.querySelector(".js-previous-day").addEventListener('click', previousDayButtonClickedEvent);
+    document.querySelector(".js-next-day").addEventListener('click', nextDayButtonClickedEvent);
+
     const data = await getAllSegments();
 
     await fillDropdownWithSegments(data);
 
-    document.addEventListener('change', dropdownItemChangedEvent);
+    segmentsDropdown.addEventListener('change', dropdownItemChangedEvent);
+
+    dateInput.addEventListener('change', updateTrafficReport);
 
     console.log(data);
 };
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded...');
+
+    segmentsDropdown = document.querySelector('.js-segments');
+    dateInput = document.querySelector(".js-date");
 
     initFrontend();
 });

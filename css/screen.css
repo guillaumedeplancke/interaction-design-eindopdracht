@@ -563,6 +563,49 @@ a:focus {
     text-align: right;
 }
 
+/*
+    Component: App footer
+    ---
+    Footer with datepicker and < & > arrows
+*/
+
+.c-app__footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.c-arrow__buton {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-top: 6px
+}
+
+.c-arrow__icon {
+    fill: var(--global-color-alpha-10);
+    width: 24px;
+    height: 24px;
+}
+
+/*
+    Component: Datepicker
+    ---
+    Class for html form datepicker elements
+*/
+
+.c-datepicker {
+    display: flex;
+    justify-content: center;
+}
+
+.c-datepicker__input {
+    padding: 8px 16px;
+    border-radius: 30px;
+    width: 120px;
+    text-align: center;
+}
+
 /*------------------------------------*\
 #UTILITIES
 \*------------------------------------*/

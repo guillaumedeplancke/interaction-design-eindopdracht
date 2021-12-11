@@ -10,6 +10,7 @@
 
 	<link rel="stylesheet" href="css/normalize.css" />
 	<link rel="stylesheet" href="css/screen.css" />
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
 </head>
 
 <body>
@@ -52,8 +53,26 @@
 		</div>		
 
 		<div class="c-app__footer">
+			<div class="c-arrow">
+				<button class="c-arrow__buton js-previous-day">
+					<svg class="c-arrow__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<rect fill="none" height="24" width="24"/>
+						<g><polygon points="17.77,3.77 16,2 6,12 16,22 17.77,20.23 9.54,12"/></g>
+					</svg>
+				</button>
+			</div>
+			
 			<div class="c-datepicker">
-				<!-- TODO: add datepicker -->
+				<input class="c-input c-datepicker__input js-date" type="text">
+			</div>
+
+			<div class="c-arrow">
+				<button class="c-arrow__buton js-next-day">
+					<svg class="c-arrow__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<g><path d="M0,0h24v24H0V0z" fill="none"/></g>
+						<g><polygon points="6.23,20.23 8,22 18,12 8,2 6.23,3.77 14.46,12"/></g>
+					</svg>
+				</button>
 			</div>
 		</div>
 		
@@ -61,6 +80,8 @@
 
 	<!-- Source: https://github.com/proj4js/proj4js#using-->
 	<script src="./js/proj4.js"></script>
+	<!-- Source: https://github.com/Pikaday/Pikaday-->
+	<script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
 	<script src="./js/app.js"></script>
 </body>
 </html>
