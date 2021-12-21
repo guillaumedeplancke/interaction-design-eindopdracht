@@ -212,7 +212,13 @@ const nextDayButtonClickedEvent = () => {
 
     if (currentDisplayDate.getDate() != new Date().getDate() || currentDisplayDate.getMonth() != new Date().getMonth()) {
         currentDisplayDate.setDate(currentDisplayDate.getDate() + 1);
-    }   
+    } else {
+        dateInput.classList.add("c-datepicker__shake");
+
+        dateInput.addEventListener("animationend", e => {
+            e.target.classList.remove("c-datepicker__shake");
+        });
+    }
 
     datepicker.setDate(currentDisplayDate);
 };
