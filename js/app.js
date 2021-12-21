@@ -149,6 +149,8 @@ const getStreetnameFromCoordinates = async (coords) => {
 const fillDropdownWithSegments = (segments) => {
     segmentsDropdown.innerHTML = '';
 
+    segmentsDropdown.innerHTML += "<option selected disabled>Choose a segment...</option>";
+
     for (var item in segments) {
         let id = item,
             streetname = segments[id];
