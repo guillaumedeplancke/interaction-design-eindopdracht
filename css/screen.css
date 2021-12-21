@@ -113,7 +113,7 @@ h1 {
 }
 
 h2 {
-    font-size: 32px;
+    font-size: 28px;
     line-height: 40px;
     margin: 0 0 24px;
 }
@@ -563,6 +563,40 @@ a:focus {
     text-align: right;
 }
 
+/* 
+    Component: progress bar
+    ---
+    Class to put on progress bar
+*/
+
+.c-app__loading {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: center;
+}
+
+.c-progress {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    width: 100%;
+    height: calc(var(--global-baseline) * 3);
+}
+
+.c-progress::-webkit-progress-bar {
+    border-radius: calc(calc(var(--global-baseline) * 3) / 2);
+    border: solid 1px var(--global-color-alpha-30);
+    background-color: #00094D;
+}
+
+.c-progress::-webkit-progress-value {
+    border-radius: calc(calc(var(--global-baseline) * 3) / 2);
+    background-color: var(--global-color-alpha-30);
+    transition: all 0.5s;
+}
+
 /*
     Component: App footer
     ---
@@ -637,6 +671,16 @@ a:focus {
 /*------------------------------------*\
 #UTILITIES
 \*------------------------------------*/
+
+/*
+    Utilities: display
+    ---
+    Utiltity classes to change the display property
+*/
+
+.u-display-none {
+    display: none !important;
+}
 
 /*
     Utilities: spacing

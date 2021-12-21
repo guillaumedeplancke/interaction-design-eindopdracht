@@ -29,7 +29,7 @@
 				</svg>
 			</div>
 	
-			<div class="c-reports">
+			<div class="c-reports js-report-view u-display-none">
 				<div class="c-report js-pedestrians">
 					<h2 class="c-report__label">Voetgangers</h2>
 					<p class="c-report__counter js-counter">--</p>
@@ -50,7 +50,13 @@
 					<p class="c-report__counter js-counter">--</p>
 				</div>
 			</div>
-		</div>		
+		</div>
+		
+		<div class="c-app__loading js-loading-view">
+			<h2 class="u-mb-md">Loading...</h2>
+			<progress class="c-progress u-mb-md js-progress" value="0" max="100"></progress>
+			<p class="js-status-message">Fetching segments...</p>
+		</div>
 
 		<div class="c-app__footer">
 			<div class="c-arrow">

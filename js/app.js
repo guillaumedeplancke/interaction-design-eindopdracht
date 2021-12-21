@@ -1,9 +1,10 @@
-const apiKey = 'ZsNKAguxnB7VDiP5bJEaY1a9Lh8Ymx2D7nhxbdFD';
+const apiKey = 'VGRED8Vd4j3mKt165MZbg8mIB9TqUjr73LBatmk6';
 const apiUrl = 'https://telraam-api.net/v1';
 const proxyUrl = 'https://cors.guillaume.cloud/';
 
 let currentDisplayDate, datepicker;
-let segmentsDropdown, dateInput;
+let reportView, loadingView;
+let segmentsDropdown, dateInput, progressBar, statusMessage;
 
 // Source: https://epsg.io/31370
 var be_proj =
@@ -17,9 +18,11 @@ const getUserCoordinates = () => {
     };
 };
 
-const getAllSegments = () => {
+const getAllSegmentsFiltered = () => {
     const endpoint = '/segments/all';
     const url = proxyUrl + apiUrl + endpoint;
+
+    statusMessage.innerHTML = "Fetching all segments...";
 
     return fetch(url, {
         headers: {
@@ -46,11 +49,16 @@ const getCameraForSegment = async (segmentId) => {
 };
 
 const filterSegments = async (data) => {
+    progressBar.value += 20;
+
     const today = new Date();
     const userLocation = getUserCoordinates();
     const segments = data.features;
 
-    let filteredSegments = [];
+    let segmentsNearby = [];
+
+    // Filter step 1: only get camera's nearby user location
+    statusMessage.innerHTML = "Filtering camera's...";
 
     for (const segment of segments) {
         let coordinates = segment.geometry.coordinates[0][0];
@@ -60,26 +68,59 @@ const filterSegments = async (data) => {
         let coordinates_converted = proj4('EPSG:31370', 'EPSG:4326', [coordinates[0], coordinates[1]]);
 
         if (isCoordinateInRange(coordinates_converted, userLocation, 2)) {
-            let cameraResults = await getCameraForSegment(segment.properties.oidn);
-            
-            if (cameraResults.camera && cameraResults.camera.length > 0) {
-                let latestImage = cameraResults.camera[0].last_data_package;
-                // note: the 'camera' array can contain multiple camera's, when achieving to few result it may be interesting to also look to the other camera's
+            segmentsNearby.push({
+                "id": segment.properties.oidn,
+                "coordinates": coordinates_converted
+            });
+            //segmentsNearby[segment.properties.oidn] = coordinates_converted;
+        }
+    }
 
-                if (latestImage) {
-                    let latestImageDate = new Date(Date.parse(latestImage));
+    let activeSegments = [];
 
-                    if (today.getMonth() === latestImageDate.getMonth()) {
-                        let streetname = await getStreetnameFromCoordinates(coordinates_converted);
-                        console.log(segment);
+    // Filter step 2: only get camera's which were active last month
+    statusMessage.innerHTML = "Filtering inactive camera's...";
 
-                        console.log(streetname.address.road + ' ' + streetname.address.city_district);
+    for (const segment of segmentsNearby) {    
+        let id = segment['id'],
+            coordinates = segment['coordinates'];
 
-                        filteredSegments[segment.properties.oidn] = streetname.address.road + ', ' + streetname.address.city_district;
-                    }
+        let cameraResults = await getCameraForSegment(id);
+
+        if (cameraResults.camera && cameraResults.camera.length > 0) {
+            let latestImage = cameraResults.camera[0].last_data_package;
+            // note: the 'camera' array can contain multiple camera's, when achieving to few result it may be interesting to also look to the other camera's
+
+            if (latestImage) {
+                let latestImageDate = new Date(Date.parse(latestImage));
+
+                if (today.getMonth() === latestImageDate.getMonth()) {
+                    console.log(segment);
+
+                    activeSegments.push(segment);
                 }
             }
         }
+
+        progressBar.value += Math.ceil(25 / segmentsNearby.length);
+    }
+
+    let filteredSegments = [];
+
+    // Step 3: fetch location (streetname & city) for each camera
+    statusMessage.innerHTML = "Fetching camera locations...";
+
+    for (const segment of activeSegments) {
+        let id = segment.id,
+            coordinates = segment.coordinates;
+        
+        let streetname = await getStreetnameFromCoordinates(coordinates);
+
+        console.log(streetname.address.road + ' ' + streetname.address.city_district);
+
+        filteredSegments[id] = streetname.address.road + ', ' + streetname.address.city_district;
+
+        progressBar.value += Math.ceil(50 / activeSegments.length);
     }
 
     return filteredSegments;
@@ -224,6 +265,8 @@ const nextDayButtonClickedEvent = () => {
 };
 
 const initFrontend = async () => {
+    statusMessage.innerHTML = "Initializing frontend...";
+
     currentDisplayDate = new Date(); // set date of today as default display date
 
     datepicker = new Pikaday({
@@ -246,13 +289,21 @@ const initFrontend = async () => {
     document.querySelector(".js-previous-day").addEventListener('click', previousDayButtonClickedEvent);
     document.querySelector(".js-next-day").addEventListener('click', nextDayButtonClickedEvent);
 
-    const data = await getAllSegments();
+    progressBar.value += 5;
+
+    const data = await getAllSegmentsFiltered();
+
+    statusMessage.innerHTML = "Filling dropdown...";
 
     await fillDropdownWithSegments(data);
 
-    segmentsDropdown.addEventListener('change', dropdownItemChangedEvent);
+    statusMessage.innerHTML = "There you go!";
 
+    segmentsDropdown.addEventListener('change', dropdownItemChangedEvent);
     dateInput.addEventListener('change', updateTrafficReport);
+
+    loadingView.classList.add('u-display-none');
+    reportView.classList.remove('u-display-none');
 
     console.log(data);
 };
@@ -260,7 +311,12 @@ const initFrontend = async () => {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM loaded...');
 
+    loadingView = document.querySelector('.js-loading-view');
+    reportView = document.querySelector('.js-report-view');
+
+    statusMessage = document.querySelector('.js-status-message');
     segmentsDropdown = document.querySelector('.js-segments');
+    progressBar = document.querySelector('.js-progress');
     dateInput = document.querySelector(".js-date");
 
     initFrontend();
