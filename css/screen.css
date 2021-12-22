@@ -569,22 +569,32 @@ a:focus {
     background-repeat: repeat-x; 
 }
 
-.c-report__visual--pedestrian {
+/* 
+    Component: Visual
+    ---
+    Class and modifiers to put on a div to visualise the amount of traffic for a specific type
+*/
+
+.c-visual {
+    transition: all 0.5s;
+}
+
+.c-visual--pedestrian {
     height: 24px;
     background: url("../img/svg/pedestrian.svg");   
 }
 
-.c-report__visual--biker {
+.c-visual--biker {
     height: 24px;
     background: url("../img/svg/bike.svg");
 }
 
-.c-report__visual--car {
+.c-visual--car {
     height: 14px;
     background: url("../img/svg/car.svg");
 }
 
-.c-report__visual--truck {
+.c-visual--truck {
     height: 24px;
     background: url("../img/svg/truck.svg");
 }
