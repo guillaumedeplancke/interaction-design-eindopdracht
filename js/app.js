@@ -5,6 +5,8 @@ const proxyUrl = 'https://cors.guillaume.cloud/';
 let currentDisplayDate, datepicker;
 let reportView, loadingView;
 let segmentsDropdown, dateInput, progressBar, statusMessage;
+let pedestriansCount, bikersCount, carsCount, trucksCount;
+let pedestriansVisual, bikersVisual, carsVisual, trucksVisual;
 
 // Source: https://epsg.io/31370
 var be_proj =
@@ -209,17 +211,37 @@ const getTrafficReportSummary = (report) => {
 };
 
 const showTrafficReport = (summary) => {
-    const pedestriansCount = document.querySelector('.js-pedestrians .js-counter'),
-        bikersCount = document.querySelector('.js-bikes .js-counter'),
-        carsCount = document.querySelector('.js-cars .js-counter'),
-        trucksCount = document.querySelector('.js-trucks .js-counter');
-
     pedestriansCount.innerHTML = summary.pedestrians;
     bikersCount.innerHTML = summary.bikes;
     carsCount.innerHTML = summary.cars;
     trucksCount.innerHTML = summary.heavy;
 
-    // TODO: visualize traffic with icons
+    let totalTraffic = summary.pedestrians + summary.bikes + summary.cars + summary.heavy;
+
+    let pedestrainPercentage = (summary.pedestrians / totalTraffic) * 100,
+        bikersPercentage = (summary.bikes / totalTraffic) * 100,
+        carsPercentage = (summary.cars / totalTraffic) * 100,
+        trucksPercentage = (summary.heavy / totalTraffic) * 100;
+
+    if (summary.pedestrians >= 1) {
+        pedestriansVisual.style.width = (pedestrainPercentage > 10 ? pedestrainPercentage : 10) + "%";
+        pedestriansCount.innerHTML += " (" + Math.round(pedestrainPercentage) + "%)";
+    } else pedestriansVisual.style.width = "0%";
+
+    if (summary.bikes >= 1) {
+        bikersVisual.style.width = (bikersPercentage > 10 ? bikersPercentage : 10) + "%";
+        bikersCount.innerHTML += " (" + Math.round(bikersPercentage)  + "%)";
+    } else bikersVisual.style.width = "0%";
+
+    if (summary.cars >= 1) {
+        carsVisual.style.width = (carsPercentage > 10 ? carsPercentage : 10) + "%";
+        carsCount.innerHTML += " (" + Math.round(carsPercentage)  + "%)";
+    } else carsVisual.style.width = "0%";
+
+    if (summary.heavy >= 1) {
+        trucksVisual.style.width = (trucksPercentage > 10 ? trucksPercentage : 10) + "%";
+        trucksCount.innerHTML += " (" + Math.round(trucksPercentage)  + "%)";
+    } else trucksVisual.style.width = "0%";
 };
 
 const dropdownItemChangedEvent = async () => {
@@ -320,6 +342,21 @@ document.addEventListener('DOMContentLoaded', () => {
     segmentsDropdown = document.querySelector('.js-segments');
     progressBar = document.querySelector('.js-progress');
     dateInput = document.querySelector(".js-date");
+
+    pedestriansCount = document.querySelector('.js-pedestrians .js-counter'),
+    bikersCount = document.querySelector('.js-bikes .js-counter'),
+    carsCount = document.querySelector('.js-cars .js-counter'),
+    trucksCount = document.querySelector('.js-trucks .js-counter');
+
+    pedestriansVisual = document.querySelector('.js-pedestrians .js-visual'),
+    bikersVisual = document.querySelector('.js-bikes .js-visual'),
+    carsVisual = document.querySelector('.js-cars .js-visual'),
+    trucksVisual = document.querySelector('.js-trucks .js-visual');
+
+    pedestriansVisual.style.width = "0%";
+    bikersVisual.style.width = "0%";
+    carsVisual.style.width = "0%";
+    trucksVisual.style.width = "0%";
 
     initFrontend();
 });

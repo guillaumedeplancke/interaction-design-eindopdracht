@@ -563,6 +563,32 @@ a:focus {
     text-align: right;
 }
 
+.c-report__visual {
+    height: 24px;
+    width: 320px; /* = 32px * 10 = 10 icons */
+    background-repeat: repeat-x; 
+}
+
+.c-report__visual--pedestrian {
+    height: 24px;
+    background: url("../img/svg/pedestrian.svg");   
+}
+
+.c-report__visual--biker {
+    height: 24px;
+    background: url("../img/svg/bike.svg");
+}
+
+.c-report__visual--car {
+    height: 14px;
+    background: url("../img/svg/car.svg");
+}
+
+.c-report__visual--truck {
+    height: 24px;
+    background: url("../img/svg/truck.svg");
+}
+
 /* 
     Component: progress bar
     ---
