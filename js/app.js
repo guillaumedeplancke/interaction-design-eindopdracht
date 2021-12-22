@@ -1,4 +1,4 @@
-const apiKey = 'VGRED8Vd4j3mKt165MZbg8mIB9TqUjr73LBatmk6';
+const apiKey = 'ZsNKAguxnB7VDiP5bJEaY1a9Lh8Ymx2D7nhxbdFD';
 const apiUrl = 'https://telraam-api.net/v1';
 const proxyUrl = 'https://cors.guillaume.cloud/';
 
