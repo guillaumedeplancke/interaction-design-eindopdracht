@@ -244,14 +244,6 @@ const showTrafficReport = (summary) => {
     } else trucksVisual.style.width = "0%";
 };
 
-const dropdownItemChangedEvent = async () => {
-    console.log('changed!');
-
-    console.log(segmentsDropdown.value);
-
-    updateTrafficReport();
-};
-
 const updateTrafficReport = async () => {
     pedestriansCount.innerHTML = "--";
     bikersCount.innerHTML = "--";
@@ -332,7 +324,7 @@ const initFrontend = async () => {
     previousDayButton.addEventListener('click', previousDayButtonClickedEvent);
     nextDayButton.addEventListener('click', nextDayButtonClickedEvent);
 
-    segmentsDropdown.addEventListener('change', dropdownItemChangedEvent);
+    segmentsDropdown.addEventListener('change', updateTrafficReport);
     dateInput.addEventListener('change', updateTrafficReport);
 
     loadingView.classList.add('u-display-none');
