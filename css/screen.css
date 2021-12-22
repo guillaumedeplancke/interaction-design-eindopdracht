@@ -307,7 +307,10 @@ a:focus {
 
 .c-report {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 100px 1fr;
+    grid-template-areas: 
+        "label counter"
+        "visual visual";
 
     align-items: center;
     overflow: auto;
@@ -323,6 +326,7 @@ a:focus {
 }
 
 .c-report__visual {
+    grid-area: visual;
     height: 24px;
     width: 320px; /* = 32px * 10 = 10 icons */
     background-repeat: repeat-x; 
