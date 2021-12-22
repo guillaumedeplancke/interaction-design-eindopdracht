@@ -320,8 +320,8 @@ const initFrontend = async () => {
 
     statusMessage.innerHTML = "There you go!";
 
-    previousDayButton.classList.remove("c-arrow__buton--disabled");
-    nextDayButton.classList.remove("c-arrow__buton--disabled");
+    previousDayButton.classList.remove("c-arrow__button--disabled");
+    nextDayButton.classList.remove("c-arrow__button--disabled");
     dateInput.disabled = false;
 
     previousDayButton.addEventListener('click', previousDayButtonClickedEvent);

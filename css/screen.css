@@ -404,14 +404,14 @@ a:focus {
     align-items: center;
 }
 
-.c-arrow__buton {
+.c-arrow__button {
     background: none;
     border: none;
     cursor: pointer;
     margin-top: calc(var(--global-baseline) * 0.75);
 }
 
-.c-arrow__buton--disabled {
+.c-arrow__button--disabled {
     cursor: default;
 }
 
