@@ -411,6 +411,10 @@ a:focus {
     margin-top: calc(var(--global-baseline) * 0.75);
 }
 
+.c-arrow__button:active {
+    animation: arrow-click 0.4s ease both;
+}
+
 .c-arrow__button--disabled {
     cursor: default;
 }
@@ -419,6 +423,18 @@ a:focus {
     fill: var(--global-color-alpha-10);
     width: 24px;
     height: 24px;
+}
+
+@keyframes arrow-click {
+    0% {
+        transform: scale(1)
+    }
+    50% {
+        transform: scale(1.2)
+    }
+    100% {
+        transform: scale(1)
+    }
 }
 
 /*
