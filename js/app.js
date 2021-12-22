@@ -4,7 +4,7 @@ const proxyUrl = 'https://cors.guillaume.cloud/';
 
 let currentDisplayDate, datepicker;
 let reportView, loadingView;
-let segmentsDropdown, dateInput, progressBar, statusMessage;
+let segmentsDropdown, dateInput, progressBar, statusMessage, previousDayButton, nextDayButton;
 let pedestriansCount, bikersCount, carsCount, trucksCount;
 let pedestriansVisual, bikersVisual, carsVisual, trucksVisual;
 
@@ -310,9 +310,6 @@ const initFrontend = async () => {
         }
     });
 
-    document.querySelector(".js-previous-day").addEventListener('click', previousDayButtonClickedEvent);
-    document.querySelector(".js-next-day").addEventListener('click', nextDayButtonClickedEvent);
-
     progressBar.value += 5;
 
     const data = await getAllSegmentsFiltered();
@@ -322,6 +319,13 @@ const initFrontend = async () => {
     await fillDropdownWithSegments(data);
 
     statusMessage.innerHTML = "There you go!";
+
+    previousDayButton.classList.remove("c-arrow__buton--disabled");
+    nextDayButton.classList.remove("c-arrow__buton--disabled");
+    dateInput.disabled = false;
+
+    previousDayButton.addEventListener('click', previousDayButtonClickedEvent);
+    nextDayButton.addEventListener('click', nextDayButtonClickedEvent);
 
     segmentsDropdown.addEventListener('change', dropdownItemChangedEvent);
     dateInput.addEventListener('change', updateTrafficReport);
@@ -342,6 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
     segmentsDropdown = document.querySelector('.js-segments');
     progressBar = document.querySelector('.js-progress');
     dateInput = document.querySelector(".js-date");
+
+    previousDayButton = document.querySelector(".js-previous-day");
+    nextDayButton = document.querySelector(".js-next-day");
 
     pedestriansCount = document.querySelector('.js-pedestrians .js-counter'),
     bikersCount = document.querySelector('.js-bikes .js-counter'),
