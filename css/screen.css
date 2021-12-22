@@ -652,6 +652,10 @@ a:focus {
     margin-top: 6px
 }
 
+.c-arrow__buton--disabled {
+    cursor: default;
+}
+
 .c-arrow__icon {
     fill: var(--global-color-alpha-10);
     width: 24px;
