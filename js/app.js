@@ -253,6 +253,11 @@ const dropdownItemChangedEvent = async () => {
 };
 
 const updateTrafficReport = async () => {
+    pedestriansCount.innerHTML = "--";
+    bikersCount.innerHTML = "--";
+    carsCount.innerHTML = "--";
+    trucksCount.innerHTML = "--";
+
     const data = await getTrafficForSegment(segmentsDropdown.value);
 
     const reportSummary = getTrafficReportSummary(data.report);
